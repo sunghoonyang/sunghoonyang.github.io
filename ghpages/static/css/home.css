@@ -1,0 +1,59 @@
+#sns-card {
+    background-color: paleturquoise;
+}
+
+#intro {
+    background-color: #a6e1ec;
+}
+
+.jumbotron {
+    background-color: lightcyan;
+}
+
+.bottomdiv {
+    position:absolute;
+    bottom: 15px;
+}
+.col-md-8.col-md-4 {
+    display: table-cell;
+    height: auto;
+    border: 1px solid black;
+    float: none;
+}
+
+#find-me-here {
+    font-family:inherit;
+}
+
+#char-blue {
+    color: blue;
+}
+
+#char-blue2 {
+    color: #0f4bac;
+}
+
+
+#char-blue3 {
+    color: #3b5998;
+}
+
+#char-blue4 {
+    color: #0f4bac;
+}
+
+#char-green {
+    color: #5cb85c;
+}
+
+#char-green2 {
+    color: #398439;
+}
+
+#char-green3 {
+    color: chartreuse;
+}
+
+#char-white {
+    color: antiquewhite;
+}

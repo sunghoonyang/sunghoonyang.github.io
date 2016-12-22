@@ -1,0 +1,63 @@
+﻿{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block stylesheet %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/home.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/gallery.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='bootstrap-social-gh-pages/bootstrap-social.css') }}" rel="stylesheet"/>
+{% endblock %}
+{% block body %}
+    {{ super() }}
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-md-8" id='intro'>
+                <div class="row">
+                    <h2 class="display-3"><span id="char-blue">D</span><span id="char-blue2">U</span>K<span id="char-green2">E</span> <span id="char-green3">Y</span><span id="char-blue4">A</span>N<span id="char-white">G</span></h2>
+                </div>
+                <div class="row">
+                    <h3 class="display-3"><span id="char-green3">B</span><span id="char-white">IG <span id="char-blue3">D</span>ATA</span> <span id="char-green">E</span>NGINEER</h3>
+
+                </div>
+                <p>You can download my resume here. Also, reach me at <strong><a
+                        href="mailto:sunghoonyang90@gmail.com">sunghoonyang90@gmail.com</a></strong></p>
+                <p><a href="{{ url_for('download_cv') }}" class="btn btn-primary btn-lg" role="button">DOWNLOAD
+                    RESUME</a></p>
+            </div>
+            <div class="col-md-4" id='sns-card'>
+                <div class="bottomdiv">
+                    <h3 id="find-me-here" class="display-5"><span id="char-blue3">F</span><span id="char-white">ind</span> <span id="char-white">M</span>e <span id="char-blue">H</span>ere:</h3>
+                    <a class="btn btn-social-icon btn-linkedin align-bottom"
+                       href="https://www.linkedin.com/in/sunghoonyang90/">
+                        <span class="fa fa-linkedin"></span>
+                    </a>
+                    <a class="btn btn-social-icon btn-github align-bottom" href="https://github.com/sunghoonyang">
+                        <span class="fa fa-github"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='gallery-container' class="container">
+        <!--END ABOUT SECTION-->
+        {#    <div id='gallery_wrapper' class="row">#}
+        <div id='gallery_wrapper' class="container embed-responsive embed-responsive-16by9">
+            <iframe id='gallery'
+                    name='gallery'
+                    align="middle"
+                    src="https://docs.google.com/document/d/1VXQo6G3MTKMogVngp_bVacyK4f1RdYsnVppcbZVXkCU/pub?embedded=true"
+                    width="1024px"
+                    height="6000px"
+                    frameborder="0"
+                    marginwidth="0"
+                    marginheight="0"
+                    scrolling="no"
+                    class="embed-responsive-item">
+            </iframe>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    {{ super() }}
+{% endblock %}
