@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, send_file
+from flask import render_template, send_file
 
 from ghpages.app import app
 

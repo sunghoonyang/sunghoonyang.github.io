@@ -1,0 +1,773 @@
+<div class="container" style="background-color: #fff;padding: 0 0 0 0;max-width: 451.5pt">
+ <h2 id="h.etci6ub1z6ts" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   Meta-Driven ETL from MongoDB
+  </span>
+ </h2>
+ <ol class="lst-kix_2j99rio8qhp5-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Target MongoDB &amp; client (e.g. mongo, mongoexport)
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Redshift
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Airflow SSHOperator
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    EC2
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Shell file encapsulates the control of mongoexport, and has basic safety features such as sanity checking the input arguments. Airflow Scheduler runs SSHOperator to remotely access this shell file, and performs mongoexport. The dump files are uploaded to S3 and COPY-ied into Redshift, using JSON path files.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   One interesting task was to explode the json array inside a column, and parse the JSON inside such that each key is mapped to the target table’s column and keys’ respective values are inserted as a single row. In order to do this, Regex and JSON parsing method supported by RedShift, such as JSON_ARRAY_LENGTH, JSON_EXTRACT_ARRAY_ELEMENT_TEXT. Once you explode the array, you parse each JSON like below:
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 602.00px; height: 244.00px;">
+   <img alt="" src="https://lh6.googleusercontent.com/DfRs3YNmAhdoIaXXGNmc3PXwTucsyyPU3ZWl3G4rAEc6Lg9HSJh6QJrzhSnrn3-_Mq7ivyzxN0n1JFA7ZOj_0uLg3xzP9fO-n10ffMhcVoSuU-b0m7811Zl6bnYn2WfqVEqWZ46Y" style="width: 602.00px; height: 244.00px; margin-left: 0.00px; margin-top: 0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""/>
+  </span>
+ </p>
+ <h2 id="h.q0ysrlcjshn1" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   EDW Management System
+  </span>
+ </h2>
+ <ol class="lst-kix_yb54n9vbx7nw-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Flask (Flask-Admin)
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Python libraries (e.g. Paramiko, SqlAlchemy{declarative_base})
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span>
+    Dagen - Refer to the project named:
+   </span>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:italic'>
+    DAG generator (DAGEN)
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span>
+    DataStage Controller using
+   </span>
+   <span style="font-style:italic">
+    Meta-driven IBM DataStage Job Runner
+   </span>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    (see project below)
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span>
+   This is an effort to combine fragmented web utilities and consolidate them into a single UI. This Website uses
+  </span>
+  <span style="font-weight:700">
+   Flask-Admin
+  </span>
+  <span>
+   library to provide RESTful actions on each DAGEN &amp; DataStage job meta. This website also allows DW engineers to remotely control DataStage Servers (e.g. Print the most recent job log, reset &amp; run jobs, upload output files to S3, etc)
+  </span>
+ </p>
+ <h2 id="h.kt5bv410ktcq" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   TMS BI MART Design &amp; Roll-out
+  </span>
+ </h2>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   I owned and designed BI Mart tables for following metrics that are in Coupang’s Weekly Business Report:
+  </span>
+ </p>
+ <ol class="lst-kix_3o3rr4auxc5e-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    PromisedDeliveryDate(i.e. delivery deadline) Misses
+   </span>
+  </li>
+ </ol>
+ <ol class="lst-kix_3o3rr4auxc5e-1 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:72pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    The metrics are eligible to drill-down according to
+   </span>
+  </li>
+ </ol>
+ <ol class="lst-kix_3o3rr4auxc5e-2 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:108pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Delivery Company
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:108pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Delivery Status Code
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:108pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Whether the customer is responsible for the deadline miss.
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:108pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Fulfillment Center &amp; Hubs (Hubs are smaller and geographically more granular offices that conducts final delivery to the customer)
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:108pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    DPMU or %
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:108pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Whether the parcel was damaged, and if so, in which part of the delivery life-cycle.
+   </span>
+  </li>
+ </ol>
+ <ol class="lst-kix_3o3rr4auxc5e-0" start="2" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span>
+    P
+   </span>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    romised Collection Date Misses
+   </span>
+  </li>
+ </ol>
+ <ol class="lst-kix_3o3rr4auxc5e-1 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:72pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    The lowest granularity is parcel, and each row must have timestamps of all previous statuses (click timestamp, task received in Hub, Deliveryman assigned, etc.
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:72pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    DPMU or %
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:72pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Whether the customer is responsible for the deadline miss.
+   </span>
+  </li>
+ </ol>
+ <h2 id="h.ux7kbzpr51sd" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   DAG generator (DAGEN)
+  </span>
+ </h2>
+ <ol class="lst-kix_9h6rxcwptvmf-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Jinja
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Airflow Custom Operator (S3 to Hive, S3 to Redshift, Redshift to Redshift)
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Hive &amp; Redshift as target clusters
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Jenkins
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    AWS SQS
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    S3
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   This project was conceived to automate the tedious process of creating DAGs for lift-and-shift jobs. Lift and shift jobs are tedious in a sense that thy are merely copying the incremental data from the source to the target’s staging table, and merging the staging table with the target table. Lift-and-shift jobs can be administered in a meta-driven way, and meta-driven way proves indispensable to serve stakeholders +100 source Aurora Databases and +2000 tables: and do this with negligible delay. The tables will each have in meta database parameters for ETL, such as SQL statement for the data extraction with parameterized start and end timestamp, basis timestamp column, source database and schema, and target table &amp; schema name should they be different from the source. Finally, each job will also have the jinja template category. This allows us to use different Jinja templates for each type of lift-and-shift.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span>
+   Once the meta database is live, Dagen uses SqlAlchemy’s declarative_base to bring to the Flask session the meta tables as ORM. The Relationship is set up such that each DAG object will have child tasks, which in turn has child task parameters. Dagen uses ORM data to automatically fill out the Jinjafied DAGs. the templates are filled out according to the job’s template category. For example, if the category is
+  </span>
+  <span style="font-style:italic">
+   rs_to_rs
+  </span>
+  <span>
+   (Redshift to Redshift), its task will have disparate tasks, such as the in-house developed
+  </span>
+  <span style="font-style:italic">
+   BetweenRedshiftOperator
+  </span>
+  <span>
+   that encapsulates different loading types (
+  </span>
+  <span style="font-weight:700">
+   type1
+  </span>
+  <span>
+   : snapshot - truncate insert.
+  </span>
+  <span style="font-weight:700">
+   type2
+  </span>
+  <span>
+   : master table - delete target by staging table’s primary key and insert,
+  </span>
+  <span style="font-weight:700">
+   type3
+  </span>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   : fact table - update if staging.modified_at_timestamp &gt; target.modified_at_timestamp for each primary key). From the import statements to each Airflow Operator’s parameters, all necessary variables are read from meta database and written to python file.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Once the file generation is finished, it is uploaded to a specific S3 bucket, and invokes SQS message. This calls the standard Jenkins procedure that reads from S3 bucket and automatically merge with Airflow-DAGs git project if Jenkins testes pass.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   This project successfully automated all Aurora to Redshift, Redshift to Redshift, Aurora to Hive and Redshift to Hive lift-and-shift DAG generation, and generated 4000 DAGs in less than a year.
+  </span>
+ </p>
+ <h2 id="h.sz00haaouc1l" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   Meta-driven IBM DataStage Job Runner
+  </span>
+ </h2>
+ <ol class="lst-kix_o5o4o2sdyk0h-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    IBM DataStage
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Python3.6 with MySQLdb connection, boto3
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Flask Web App
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   mySQL table has all the information of DataStage tasks (source db, query to be sent, start/end timestamp, primary key etc.) Python script in DataStage server dynamically creates a parameter set, and runs on cli DataStage jobs (using dsjob) in their respective frequency &amp; ETL group. The csv file created will be uploaded to designated S3 location.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span>
+   This project was done to reduce latency between individual job’s finish time and group-wise AWS S3 upload. By dynamically running DataStage jobs as above, each finished DataStage task is immediately followed by S3 upload. The meta-driven ETL approach also allows for easy creation of a new job. I took advantage of this to distribute ETL job creation task to all DW engineers by providing them with Flask-powered job creation form, where they can fill out the form that collects all the meta related parameters, and generate all necessary tasks for them, including corresponding Airflow task and Redshift table.
+  </span>
+ </p>
+ <h2 id="h.dqa209ebkv9i" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style="text-decoration-skip-ink:none;-webkit-text-decoration-skip:none;font-style:italic;text-decoration:underline">
+   Personal Project
+  </span>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   : Data Analysis with DAESHIN stock API
+  </span>
+ </h2>
+ <ol class="lst-kix_mwiort26h7kn-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    DAESHIN CYBOS API
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Python with Anaconda
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    MySQL
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Slack API for Pandas graph Image upload
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span>
+   This project can be found
+  </span>
+  <span style="text-decoration-skip-ink:none;-webkit-text-decoration-skip:none;color:#1155cc;text-decoration:underline">
+   <a href="https://www.google.com/url?q=http://github.com/sunghoonyang/auto_invest&amp;sa=D&amp;ust=1533982374666000" style="color:inherit;text-decoration:inherit">
+    here
+   </a>
+  </span>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   . The project calls DaeShin API every minute, get data of all KOSPI/KOSDAQ stocks their 140+ attributes, save them to MySQL DB. Another thread runs scheduled Pandas graphing process that graphs the current price and its derivatives, transaction volumes, and send the graphs to personal Slack Channel. A nodeJS server runs so the user can insert to &amp; remove the graphed stocks.
+  </span>
+ </p>
+ <h2 id="h.6tkbl16vdtvh" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   Acquisition DB Version 3
+  </span>
+ </h2>
+ <ol class="lst-kix_jew9tdfmbd0u-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Airflow
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Redshift, S3, EC2
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span>
+   Airflow has been adopted as the teamwide scheduler, and the ETL tasks were migrated to Airflow. This means that the SQL procedures were saved as files, called using PostgreSQL hooks in Airflow Operators, and downstream tasks, such as S3 flag creation, downstream job starts, are followed. The migration to Airflow also gave rise to the Dagen project. (DAG + generation, where DAG is a unit of ETL task) Using Airflow Jinja templating, the dag definition files are dynamically created using Meta table. The meta table would have dag specific information (task owner, source database, target database, upstream task, type of load, frequency of load, etc.) and create dag file accordingly. Dynamically created files are loaded to S3, where it is tried for Jenkins build test. If the dags pass Jenkins test, they are added to Airflow server’s dagbag directory location, and synced to the scheduler.
+  </span>
+ </p>
+ <h2 id="h.x61sk6n0ghvs" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   Acquisition DB Version 2
+  </span>
+ </h2>
+ <ol class="lst-kix_kexxufqvklkj-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    SQL-SERVER, bcp
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    NZSQL (EXTERNAL TABLE via NZ_UNLOAD)
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    python packages (e.g. psycopg, sqlalchemy, boto)
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   The below project synopsis was written when the Acquisition DB was still at the beta version. The initial effort was focused on Redshift, whose scheduled tasks run by crontab jobs in an EC2 instance.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Having Redshift cluster as a centerpiece of ODS, another requirement was given, that the specific transactional records be easily queried. In order to satisfy this, previously deprioritized developing SQL SERVER acquisition DB was resumed. CTDS was first tested, but the throughput was nowhere near that of BCP. A few engineers worked together to resolve the issue with BCP - the order of the column is not respected by the BCP ingestion and the load fails when the files are big. We circumvented the problem by splitting files in 32MB bite-size. This allowed me to take advantage of the relatively fast BCP utility (although the speed is nowhere near platform native Redshift).
+  </span>
+ </p>
+ <h2 id="h.3dy6vkm" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   Acquisition DB Version 1
+  </span>
+ </h2>
+ <ol class="lst-kix_list_7-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Redshift, S3, EC2, boto3, AWS CLI
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    sqoop
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    SQL-SERVER, bcp
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    pyodbc, pymssql, ctds, sqlalchemy
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Acquisition DB is Coupang’s effort to separate the transactional data (ODS) from mart data. The on-premise netezza PDA has been overloaded due to fast growth of the company, which was accompanied by inability to create sandbox-ed data sources for different teams with analysis needs. netezza PDA handled all analyses from catalog team to purchase order, thereby demanded to house all ODS. Acquisition DB is built to relieve netezza of such heavy-lifting, and separate data source for different domains. As each domain would have needs for different ODS tables, multiple instances of Redshift will be ODS for different domains. We considered two candidates: sqlserver and redshift. Sql Server was built mainly with ctds library which supports pseudo-bulk insert (where python iterator object of rows are batch processed and performed well (50k rows per sec -39 columns) However, due company’s direction of its architecture to migrate completely to AWS, redshift was eventually selected. In order to build ODS on Redshift, its COPY command from S3 was leveraged. Sqoop, from two servers that are on PDA ACL would import tables (which are audited with respect to max pk &amp; row count), format individual files with GNU utilities (sed &amp; awk) and uploaded to designated S3 path using AWS CLI. This module was built by with python, using boto3 and subprocess to call on GNU utilities. Once its on S3, it is copied to Redshift via crontab schedule from an EC2.
+  </span>
+ </p>
+ <h2 id="h.tyjcwt" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   Kafka&amp;Storm Integration on EC2
+  </span>
+ </h2>
+ <ol class="lst-kix_list_8-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    EC2 Redhat7
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Kafka 0.9.2
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Storm 1.0.2
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Zookeeper 3.4.9
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    MYSQL server on EC2
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   This project is a part of Data-Center-wide architecture transition. This project was done to build a mock environment in which MYSQL server for production feeds data to CDC and in turn to inside-company Acquisition DB. MYSQL server imitates MYSQL production server, and Kafka CDC feeds data to Kafka producers. Kafka broker is also installed inside EC2 environment, and through Storm feeds the data into Acquisition DB.
+  </span>
+ </p>
+ <h2 id="h.2et92p0" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   Web App with OracleDB for DW ETL Stakeholders
+  </span>
+ </h2>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Tools:
+  </span>
+ </p>
+ <ol class="lst-kix_list_5-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Nodejs with Express
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    OracleDB
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    CentOS 6.4 Server
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   I developed a nodeJS web app that allows ETL job stakeholders to view information about jobs in a paginated table, and choose jobs that they are interested in to request SLA alert (Talend job checks the SLA fact-table that has mapping between stakeholder and followed jobs. stakeholders receive personalized email alert should the ETL job fail to meet each stakeholder’s given SLA time) at chosen time. The application asynchronously queries data from OracleDB, and populate data in table format as well as graphically, using HighCharts. The spline/column chart will show job duration in seconds, as well as start/end time of the respective job, in 7 days recent trend.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   The web app is structured such that the users, upon landing in ./login path, must go through Company LDAP. Session middleware checks the user status and current url to protect the app from unauthorized access. If an LDAP authenticated user is not enrolled in meta table for the user accounts, session middleware redirects to the sign up form, and user can request membership. Admins, on the other hand, have admin page open to access member-request table to grant specific users application permission.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span>
+   Loading &amp; Running the node.js app that uses oracledb module on CentOS 6.4 is tricky because oracledb module has dependency to gcc version 11. Since upgrading the server OS to CentOS 7 was not a possible choice, this problem was circumvented by using devtoolset-3, an unofficial package that updates the session’s c++ compiler. I first had created a bash script that sets LD_LIBRARY_PATH, enables devtoolset-3 (
+  </span>
+  <span style="font-style:italic">
+   scl enable devtoolset-3 bash
+  </span>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   )  and runs node.js app via npm start as a daemon. But this is less than ideal because it does not guarantee app restart should stakeholder activity generate error and app terminates. This was dealt with by using pm2 and setting up environment variable and package.json, and devtoolset-3 enabling with shelljs package in express.config.js file.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <h2 id="h.3znysh7" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   DB Monitoring with Icinga2
+  </span>
+ </h2>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Tools:
+  </span>
+ </p>
+ <ol class="lst-kix_list_2-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Docker
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    cx_Oracle
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    OracleDB
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Icinga2Web
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Icinga is an app that makes DB monitoring easy. A user is responsible for defining a few objects, and the rest is done by Icinga. User is responsible for writing the check that have logic inside that determines if the job is complete for particular service. The check is to return values from 0 to 3, each meaning Complete, Warning, Critical, Unknown respectively. User also creates service object that contains parameters for the check for the particular service. For example, a ETL migration of Sales mart table may be parameters such as jobid, user type, and so on, which are passed into the check script. Check script that runs custom logic. For example, we could use Nagios to pass in threshold rowcount as a minimum requirement for the job to pass (sales mart row count has to be &gt; 100000 per day).
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Icinga is mounted on a docker image, as well as oracle instantclient, mySql as the server side db and and Ubuntu(Debian) for ssh. The scripts are written in Python, and connects to OracleDB via cx_Oracle. In my scope of project, we made use of the existing job meta schema in OracleDB, and analyzed a single table row by row to as a single row equates to single job or service.
+  </span>
+ </p>
+ <h2 id="h.1fob9te" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   SLA monitoring &amp; Alert
+  </span>
+ </h2>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Tools:
+  </span>
+ </p>
+ <ol class="lst-kix_list_6-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Talend
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Slack Webhook, in-house sms API
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    OracleDB
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   requirement:
+  </span>
+ </p>
+ <ol class="lst-kix_list_1-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Each jobs have a SLA time, and needs to send out a notification once should it fail to run before SLA time.
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Have the notification sent to three different channels: Slack Channel, individual Admin, and Stakeholder Emailing
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Once query is made, the data is iterated to concatenate recipient specific notification content, and sent as an email or sms according to the user role. The IDs of jobs whose notifications are sent out are logged to ensure one-time alert.
+  </span>
+ </p>
+ <h2 id="h.30j0zll" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   OracleDB schema backup
+  </span>
+ </h2>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Tools:
+  </span>
+ </p>
+ <ol class="lst-kix_list_3-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    AWS OracleRDS
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    S3 Bucket
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+    Talend
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   A project to have a backup for ETL meta, housed in OracleDB. Create an OracleRDS instanc, and set it up so that it is a replica of the on-premise ETL meta schema (not just DDL but copying functions, objects, SP and so on.) create a snapshot of it, and delete the instance.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Create a Talend job that copies the meta tables (dimension table for jobs, log tables for running jobs, data quality dimension tables, etc) and periodically save the data as a file to S3 bucket. Also create a talend job that inserts these files to respective tables in OracleRDS
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   When OracleDB is down, have the snapshot rebooted, and the files in S3 are inserted into respective tables in OracleRDS. Change the server parameter of OracleDB to point to DNS name of OracleRDS.
+  </span>
+ </p>
+ <h2 id="h.gjdgxs" style='padding-top:18pt;margin:0;color:#000000;padding-left:0;font-size:16pt;padding-bottom:6pt;line-height:1.1500000000000001;page-break-after:avoid;font-family:"Arial";orphans:2;widows:2;text-align:left;padding-right:0'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:16pt;font-family:"Arial";font-style:normal'>
+   Hourly email of ETL jobs Network Graphs
+  </span>
+ </h2>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   Tools:
+  </span>
+ </p>
+ <ol class="lst-kix_list_4-0 start" start="1" style="padding:0;margin:0">
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span>
+    Talend for job design
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span>
+    JDBC Connection to OracleDB
+   </span>
+  </li>
+  <li style='padding:0;color:#000000;font-size:11pt;line-height:1.1500000000000001;margin-right:0;margin-left:36pt;font-family:"Arial";margin-top:0;orphans:2;margin-bottom:0;widows:2;text-align:left'>
+   <span>
+    R Studio (using
+   </span>
+   <span style="font-style:italic">
+    network
+   </span>
+   <span>
+    package)
+   </span>
+  </li>
+ </ol>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:center'>
+  <span style="overflow: hidden; display: inline-block; margin: 0.00px 0.00px; border: 0.00px solid #000000; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px); width: 300.00px; height: 300.00px;">
+   <img alt="" src="https://lh6.googleusercontent.com/ePHFV9-ZMlpzlX44VEQ-HNgYitdGEffKA7QM6SwykSbYb0-K2qZkY8BU1RzKEK012qRdl49W69-le3_jnmRH0mG1TLK555m4sR8z2i39zbBcvhKqXtidb5jVAPFSF_rp2XJXYiNFo40TC7ueTg" style="width: 300.00px; height: 300.00px; margin-left: -0.00px; margin-top: -0.00px; transform: rotate(0.00rad) translateZ(0px); -webkit-transform: rotate(0.00rad) translateZ(0px);" title=""/>
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;text-align:left'>
+  <span>
+   Network graph populated using Network package. Data is loaded onto R studio from OracleDB using JDBC driver.
+  </span>
+  <span style="text-decoration-skip-ink:none;-webkit-text-decoration-skip:none;color:#1155cc;text-decoration:underline">
+   <a href="https://www.google.com/url?q=https://drive.google.com/open?id%3D0B6hWuUW2vVLsR2ZEU3VLNXEwWjA&amp;sa=D&amp;ust=1533982374677000" style="color:inherit;text-decoration:inherit">
+    source code
+   </a>
+  </span>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   The graphs are populated in the production server on which the module runs, and the graphs, in jpg format, are sent to stakeholders.
+  </span>
+ </p>
+ <p style='padding:0;margin:0;color:#000000;font-size:11pt;font-family:"Arial";line-height:1.1500000000000001;orphans:2;widows:2;height:11pt;text-align:left'>
+  <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+  </span>
+ </p>
+ <div>
+  <p style='padding-top:0pt;margin:0;color:#000000;padding-left:0;font-size:11pt;padding-bottom:36pt;line-height:1.1500000000000001;font-family:"Arial";orphans:2;widows:2;height:11pt;text-align:right;padding-right:0'>
+   <span style='color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:"Arial";font-style:normal'>
+   </span>
+  </p>
+ </div>
+</div>

@@ -6,6 +6,7 @@
     {{ super() }}
     <link href="{{ url_for('static', filename='css/home.css') }}" rel="stylesheet"/>
     <link href="{{ url_for('static', filename='css/gallery.css') }}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='css/project.min.css') }}" rel="stylesheet"/>
     <link href="{{ url_for('static', filename='bootstrap-social-gh-pages/bootstrap-social.css') }}" rel="stylesheet"/>
 {% endblock %}
 {% block body %}
@@ -39,24 +40,9 @@
             </div>
         </div>
     </div>
-    <div id='gallery-container' class="container">
-        <!--END ABOUT SECTION-->
-        <div id='gallery_wrapper' class="container embed-responsive embed-responsive-16by9">
-            <iframe id='gallery'
-                    name='gallery'
-                    align="middle"
-                    src="https://docs.google.com/document/d/1VXQo6G3MTKMogVngp_bVacyK4f1RdYsnVppcbZVXkCU/pub?embedded=true"
-                    width="1024px"
-                    height="6000px"
-                    frameborder="0"
-                    marginwidth="0"
-                    marginheight="0"
-                    scrolling="no"
-                    class="embed-responsive-item">
-            </iframe>
-        </div>
-    </div>
+    {% include "project.html" %}
 {% endblock %}
 {% block script %}
     {{ super() }}
+    <script src="{{ url_for('static', filename='js/project.js') }}"></script>
 {% endblock %}

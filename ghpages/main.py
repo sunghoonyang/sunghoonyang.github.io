@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 '''Entry point to all things to avoid circular imports.'''
 from ghpages.app import app, freezer
 from ghpages.views import *

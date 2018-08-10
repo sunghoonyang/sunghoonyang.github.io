@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 
 REPO_NAME = "sunghoonyang.github.io"  # Used for FREEZER_BASE_URL
