@@ -1,5 +1,6 @@
 #sns-card {
     background-color: paleturquoise;
+    align-content: center;
 }
 
 #intro {
@@ -8,12 +9,9 @@
 
 .jumbotron {
     background-color: lightcyan;
+    align-content: center;
 }
 
-.bottomdiv {
-    position:absolute;
-    bottom: 15px;
-}
 .col-md-8.col-md-4 {
     display: table-cell;
     height: auto;
@@ -22,9 +20,20 @@
 }
 
 #find-me-here {
-    font-family:inherit;
+    font-family: inherit;
 }
 
+#bottomdiv {
+    float: none;
+    display: table-cell;
+    vertical-align: bottom;
+}
+
+/* phone */
+@media only screen and (max-device-width: 480px) {
+
+}
+/*color schemes*/
 #char-blue {
     color: blue;
 }
@@ -32,7 +41,6 @@
 #char-blue2 {
     color: #0f4bac;
 }
-
 
 #char-blue3 {
     color: #3b5998;

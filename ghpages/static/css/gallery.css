@@ -16,11 +16,17 @@ body, html {
     margin-right: 20%;
 }
 
-jumbotron {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+/* phone */
+@media only screen and (max-device-width: 480px) {
+    #gallery-container {
+        width: 100%;
+        height: 100%;
+        alignment: inherit;
+        position: relative;
+        padding: 8px 8px 8px 8px;
+            margin-left: 0px;
+    margin-right: 0px;
+    }
 }
 
 #gallery-container {
@@ -37,4 +43,7 @@ jumbotron {
     height: 100%;
     border: none;
     overflow: visible;
+    position: relative;
+    /*padding-bottom: 56.25%;*/
+    padding-top: 35px;
 }
