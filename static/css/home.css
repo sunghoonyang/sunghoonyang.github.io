@@ -1,14 +1,16 @@
 #sns-card {
-    background-color: paleturquoise;
+   background: linear-gradient(to top, lightcyan, paleturquoise);
+    /*background-color: paleturquoise;*/
     align-content: center;
 }
 
 #intro {
-    background-color: #a6e1ec;
+    /*background-color: #a6e1ec;*/
+    background: linear-gradient(to top, lightcyan, #a6e1ec);
 }
 
 .jumbotron {
-    background-color: lightcyan;
+    background: linear-gradient(to top, white, paleturquoise);
     align-content: center;
 }
 
@@ -33,6 +35,7 @@
 @media only screen and (max-device-width: 480px) {
 
 }
+
 /*color schemes*/
 #char-blue {
     color: blue;
@@ -64,4 +67,8 @@
 
 #char-white {
     color: antiquewhite;
+}
+
+#char-dark-white {
+    color: #eff7ff;
 }

@@ -12,7 +12,7 @@ What it does:
 
 if __name__ == '__main__':
     """get file using gdrive bash cli utility"""
-    cmd = 'gdrive export --mime -f text/html %s' % os.environ['GOOGLE_DRIVE_TOKEN']
+    cmd = 'gdrive export --mime -f text/html %s' % os.environ['GOOGLE_DRIVE_FILE_ID']
     IMPORT_PATH = os.environ['IMPORT_PATH']
     OUTPUT_HTML_PATH = os.environ['OUTPUT_HTML_PATH']
     OUTPUT_CSS_PATH = os.environ['OUTPUT_CSS_PATH']
@@ -35,7 +35,7 @@ if __name__ == '__main__':
                     content.name = 'div'
                     css = content.get('style', [])
                     s = cssutils.parseStyle(css)
-                    s.padding = r'0pt 0pt 0pt 0pt'
+                    s.padding = r'12pt 12pt 12pt 12pt'
                     content['style'] = re.sub('\n', '', s.cssText)
                     output_html.write(content.prettify())
 
