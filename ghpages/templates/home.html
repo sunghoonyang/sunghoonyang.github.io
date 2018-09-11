@@ -57,14 +57,14 @@
             <div class="row">
                 {#            Coupang#}
                 <div class="career-logo col-sm-6 w-25 mw-100">
-                    <a href="{{ url_for('home', gallery_type='coupang') }}">
+                    <a href="{{ url_for('coupang_gallery') }}">
                         <img alt='career-logo'
                              src="https://techcrunch.com/wp-content/uploads/2014/05/coupang-logo.jpg?w=730&crop=1">
                     </a>
                 </div>
                 {#            NYU CUSP#}
                 <div class="career-logo col-sm-6 w-25">
-                    <a href="{{ url_for('home', gallery_type='cusp') }}">
+                    <a href="{{ url_for('cusp_gallery') }}">
                         <img alt='career-logo'
                              src="http://cusp.nyu.edu/wp-content/uploads/2018/03/Untitled-1.png">
                     </a>
@@ -73,7 +73,7 @@
         </div>
     {% elif gallery_type != '' %}
         <div class="go-to-gallery-home">
-            <a href="{{ url_for('home', gallery_type='') }}">Go To All Projects</a>
+            <a href="{{ url_for('home') }}">Go To All Projects</a>
         </div>
         {% if gallery_type == 'coupang' %}
             {% include "project.html" %}
