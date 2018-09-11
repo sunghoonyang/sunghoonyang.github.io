@@ -1,5 +1,26 @@
+/*CUSP, Coupang Logo Image*/
+img[alt='CUSP Logo'] {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.career-logo {
+    text-align: center;
+}
+.career-choice-prompt {
+    text-align: center;
+}
+.go-to-gallery-home {
+    text-align: center;
+}
+
+img[alt='career-logo'] {
+    width: 150px;
+    height: auto;
+}
+
 #sns-card {
-   background: linear-gradient(to top, lightcyan, paleturquoise);
+    background: linear-gradient(to top, lightcyan, paleturquoise);
     /*background-color: paleturquoise;*/
     align-content: center;
 }
@@ -11,6 +32,11 @@
 
 .jumbotron {
     background: linear-gradient(to top, white, paleturquoise);
+    align-content: center;
+}
+
+#footer {
+    background: linear-gradient(to bottom, white, paleturquoise);
     align-content: center;
 }
 

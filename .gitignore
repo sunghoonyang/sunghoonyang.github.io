@@ -94,3 +94,5 @@ ENV/
 .ropeproject
 
 *.iml
+
+.DS_Store

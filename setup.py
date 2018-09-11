@@ -56,7 +56,9 @@ setup(
               'venv.lib.python3.7.site-packages.pip-10.0.1-py3.7.egg.pip._internal.utils',
               'venv.lib.python3.7.site-packages.pip-10.0.1-py3.7.egg.pip._internal.models',
               'venv.lib.python3.7.site-packages.pip-10.0.1-py3.7.egg.pip._internal.commands',
-              'venv.lib.python3.7.site-packages.pip-10.0.1-py3.7.egg.pip._internal.operations', 'ghpages'],
+              'venv.lib.python3.7.site-packages.pip-10.0.1-py3.7.egg.pip._internal.operations',
+              'ghpages'
+              'markdown'],
     url='https://sunghoonyang.github.io',
     license='MIT License',
     author='sunghoonyang',
