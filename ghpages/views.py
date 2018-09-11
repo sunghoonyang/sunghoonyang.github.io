@@ -18,7 +18,7 @@ def coupang_gallery():
 
 @app.route('/gallery/cusp/')
 def cusp_gallery():
-    with open('ghpages/templates/gallery_in_jupyter.md', 'r') as md:
+    with open('gallery-in-jupyter/README.md', 'r') as md:
         gallery_content = Markup(markdown.markdown(md.read()))
         return render_template('home.html', gallery_type='cusp', gallery_content=gallery_content)
 
