@@ -1,3 +1,3 @@
 [submodule "gallery-in-jupyter"]
 	path = gallery-in-jupyter
-	url = https://github.com/sunghoonyang/gallery-in-jupyter
+	url = https://github.com/sunghoonyang/gallery-in-jupyter.git
