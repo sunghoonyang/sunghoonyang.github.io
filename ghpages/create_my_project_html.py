@@ -12,13 +12,14 @@ What it does:
 
 if __name__ == '__main__':
     """get file using gdrive bash cli utility"""
-    cmd = 'gdrive export --mime -f text/html %s' % os.environ['GOOGLE_DRIVE_FILE_ID']
+    cmd = 'cd ~/tmp; gdrive export --mime -f text/html %s' % os.environ['GOOGLE_DRIVE_FILE_ID']
     IMPORT_PATH = os.environ['IMPORT_PATH']
     OUTPUT_HTML_PATH = os.environ['OUTPUT_HTML_PATH']
     OUTPUT_CSS_PATH = os.environ['OUTPUT_CSS_PATH']
     OUTPUT_JS_PATH = os.environ['OUTPUT_JS_PATH']
     p = Popen(cmd, shell=True, stdout=PIPE)
     _ = p.communicate()[0]
+
 
     """extract style, body, script"""
     with open(IMPORT_PATH, 'r') as html_doc, open(OUTPUT_HTML_PATH, 'w') as output_html\
