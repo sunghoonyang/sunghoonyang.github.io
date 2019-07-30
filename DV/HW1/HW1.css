@@ -1,0 +1,20 @@
+.grid line {
+    stroke: lightgrey;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
+
+}
+
+body {
+    background-color: gray;
+    margin: 1em auto;
+}
+
+svg {
+    background-color: white;
+}
+
+g path {
+    fill: none;
+    stroke: black;
+}

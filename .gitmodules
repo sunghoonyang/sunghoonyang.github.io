@@ -1,3 +1,6 @@
 [submodule "gallery-in-jupyter"]
 	path = gallery-in-jupyter
 	url = https://github.com/sunghoonyang/gallery-in-jupyter.git
+[submodule "DV-final-challenge"]
+	path = DV-final-challenge
+	url = https://github.com/sunghoonyang/DV-final-challenge.git
